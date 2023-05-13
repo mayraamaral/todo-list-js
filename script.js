@@ -1,48 +1,72 @@
-const form = document.getElementById("form");
-const divPai = document.getElementById("pai");
+const form = document.getElementById("form-do-item");
+const divPai = document.getElementById("lista-de-itens");
 
-const lista = document.createElement("ul");
-divPai.appendChild(lista);
+const listaDeTodos = document.createElement("ul");
+divPai.appendChild(listaDeTodos);
 
 form.addEventListener("submit", (event) => {
   event.preventDefault();
-
   const itemTexto = form.elements["nome-item"].value;
 
-  if (itemTexto) {
-    const novoItem = criarItem(itemTexto);
+  const novoItem = criarItem(itemTexto);
 
-    lista.appendChild(novoItem);
+  listaDeTodos.appendChild(novoItem);
 
-    form.reset();
-  }
+  form.reset();
 });
 
-function criarItem(texto) {
-  const novoItem = document.createElement("li");
-  novoItem.classList.add("item");
+const criarItem = (texto) => {
+  if (texto.trim()) {
+    // <li class="item"> <span> texto </span> </li>
+    const novoItem = document.createElement("li");
+    novoItem.classList.add("item");
 
-  const span = document.createElement("span");
-  span.textContent = texto;
+    const span = document.createElement("span");
+    span.setAttribute("title", texto);
+    span.textContent = texto;
 
+    const [botaoEditar, botaoDeletar] = criarBotoesDeEditarEDeletar(
+      span,
+      texto,
+      novoItem,
+      listaDeTodos
+    );
+
+    const botoes = document.createElement("div");
+    botoes.append(botaoEditar, botaoDeletar);
+
+    novoItem.appendChild(span);
+
+    novoItem.appendChild(botoes);
+
+    return novoItem;
+  } else {
+    alert("Digite o texto do item a ser adicionado");
+  }
+};
+
+const criarBotoesDeEditarEDeletar = (span, texto, item, lista) => {
   const botaoEditar = document.createElement("button");
   botaoEditar.classList.add("fa-solid", "fa-pen-to-square", "icones");
   botaoEditar.addEventListener("click", () => {
-    const novoTexto = prompt("Digite o novo texto do item:", texto);
-    if (novoTexto) {
-      span.textContent = novoTexto;
-    }
+    editarItem(span, texto);
   });
 
-  const botaoExcluir = document.createElement("button");
-  botaoExcluir.classList.add("fa-solid", "fa-trash", "icones", "excluir");
-  botaoExcluir.addEventListener("click", () => {
-    lista.removeChild(novoItem);
+  const botaoDeletar = document.createElement("button");
+  botaoDeletar.classList.add("fa-solid", "fa-trash", "icones");
+  botaoDeletar.addEventListener("click", () => {
+    deletarItem(item, lista);
   });
+  return [botaoEditar, botaoDeletar];
+};
 
-  novoItem.appendChild(span);
-  novoItem.appendChild(botaoEditar);
-  novoItem.appendChild(botaoExcluir);
+const editarItem = (item, textoAntigo) => {
+  const novoTexto = prompt("Digite o novo texto do item:", textoAntigo);
+  if (novoTexto.trim()) {
+    item.textContent = novoTexto;
+  }
+};
 
-  return novoItem;
-}
+const deletarItem = (item, lista) => {
+  lista.removeChild(item);
+};
