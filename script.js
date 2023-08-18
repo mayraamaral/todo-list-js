@@ -4,6 +4,8 @@ const divPai = document.getElementById("lista-de-itens");
 const listaDeTodos = document.createElement("ul");
 divPai.appendChild(listaDeTodos);
 
+// function () {}
+
 form.addEventListener("submit", (event) => {
   event.preventDefault();
   const itemTexto = form.elements["nome-item"].value;
@@ -14,6 +16,12 @@ form.addEventListener("submit", (event) => {
 
   form.reset();
 });
+
+// const cachorro = { nome: "Luke", idade: 2, raca: "Dálmata" };
+
+// const { nome, idade, raca } = cachorro;
+
+// console.log(nome, idade, raca);
 
 const criarItem = (texto) => {
   if (texto.trim()) {
@@ -51,6 +59,9 @@ const criarBotoesDeEditarEDeletar = (span, texto, item, lista) => {
   botaoEditar.addEventListener("click", () => {
     editarItem(span, texto);
   });
+
+  // editarItem
+  // editarItem()
 
   const botaoDeletar = document.createElement("button");
   botaoDeletar.classList.add("fa-solid", "fa-trash", "icones");
